@@ -356,33 +356,105 @@
           </div>
 
           <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form id="submit-form" action="" class="php-email-form">
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="name">Your Name</label>
-                  <input type="text" name="name" class="form-control" id="name" required>
+            <form id="submit-form" class="php-email-form">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="name">Your Name</label>
+                        <input type="text" name="name" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email">Your Email</label>
+                        <input type="email" class="form-control" name="email" id="email" required>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                  <label for="name">Your Email</label>
-                  <input type="email" class="form-control" name="email" id="email" required>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" class="form-control" name="subject" id="subject" required>
                 </div>
-              </div>
-              <div class="form-group">
-                <label for="name">Subject</label>
-                <input type="text" class="form-control" name="subject" id="subject" required>
-              </div>
-              <div class="form-group">
-                <label for="name">Message</label>
-                <textarea class="form-control" name="message" rows="10" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea class="form-control" name="message" rows="10" required></textarea>
+                </div>
+                <div class="my-3">
+                    <div class="loading">Loading</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message">Your message has been sent. Thank you!</div>
+                </div>
+                <div class="text-center"><button type="submit">Send Message</button></div>
             </form>
-          </div>
+        </div>
+    
+        <script>
+            document.getElementById('submit-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                // Clear previous error messages
+                document.querySelector('.error-message').style.display = 'none';
+                document.querySelector('.sent-message').style.display = 'none';
+                let formIsValid = true;
+                let errorMessage = '';
+    
+                // Validate inputs
+                const name = document.getElementById('name');
+                const email = document.getElementById('email');
+                const subject = document.getElementById('subject');
+                const message = document.querySelector('textarea[name="message"]');
+    
+                if (!name.value.trim() || /\d/.test(name.value)) {
+                    name.classList.add('error');
+                    errorMessage += 'Name should not contain numbers.\n';
+                    formIsValid = false;
+                } else {
+                    name.classList.remove('error');
+                }
+    
+                if (!email.value.trim() || !validateEmail(email.value)) {
+                    email.classList.add('error');
+                    errorMessage += 'Please enter a valid email address.\n';
+                    formIsValid = false;
+                } else {
+                    email.classList.remove('error');
+                }
+    
+                if (!subject.value.trim()) {
+                    subject.classList.add('error');
+                    errorMessage += 'Subject is required.\n';
+                    formIsValid = false;
+                } else {
+                    subject.classList.remove('error');
+                }
+    
+                if (!message.value.trim()) {
+                    message.classList.add('error');
+                    errorMessage += 'Message is required.\n';
+                    formIsValid = false;
+                } else {
+                    message.classList.remove('error');
+                }
+    
+                if (formIsValid) {
+                    document.querySelector('.loading').style.display = 'block';
+    
+                    // Simulate form submission
+                    setTimeout(() => {
+                        document.querySelector('.loading').style.display = 'none';
+                        document.querySelector('.sent-message').style.display = 'block';
+                    }, 2000);
+    
+                    // Uncomment the following line to actually submit the form
+                    // this.submit();
+                } else {
+                    document.querySelector('.error-message').style.display = 'block';
+                    document.querySelector('.error-message').innerText = errorMessage;
+                }
+            });
+    
+            function validateEmail(email) {
+                const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                return re.test(String(email).toLowerCase());
+            }
+        </script>
+    
 
         </div>
 
